@@ -73,8 +73,18 @@ packages:
 	brew upgrade --cask slack || brew install --cask slack
 	brew upgrade --cask figma || brew install --cask figma
 	brew upgrade --cask telegram || brew install --cask telegram
-#	brew upgrade --cask rectangle || brew install --cask rectangle # Free version
-	brew upgrade --cask rectangle-pro || brew install --cask rectangle-pro # Paid version
+
+	brew list --cask rectangle >/dev/null 2>&1 && brew upgrade --cask rectangle || \
+	(brew list --cask rectangle-pro >/dev/null 2>&1 && brew upgrade --cask rectangle-pro || \
+	(read -p "Which Rectangle would you install ? [r/R for Rectangle, p/P for Rectangle Pro, any other key to skip]:" answer; \
+	case "$$answer" in \
+		[Rr]) \
+			brew install --cask rectangle;; \
+		[Pp]) \
+			brew install --cask rectangle-pro;; \
+		*) \
+			echo "Skipping Rectangle and Rectangle Pro installation.";; \
+		esac;))
 
 
 powerlevel10k:
@@ -85,7 +95,7 @@ powerlevel10k:
 		echo "Powerlevel10k theme already exists."; \
 	fi
 
-open_iterm2:
+open:
 	open -a iTerm
 	
 	@if command -v rectangle >/dev/null; then \
@@ -95,8 +105,8 @@ open_iterm2:
 	fi
 
 
-.PHONY: xcode homebrew bundler rbenv ruby create_folder packages powerlevel10k open_iterm2
+.PHONY: xcode homebrew bundler rbenv ruby create_folder packages powerlevel10k open
 
 
-install: xcode homebrew rbenv ruby bundler create_folder packages powerlevel10k open_iterm2
+install: xcode homebrew rbenv ruby bundler create_folder packages powerlevel10k open
 update: rbenv ruby packages
