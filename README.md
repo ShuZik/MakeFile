@@ -40,7 +40,7 @@
     - Checks if the `~/.powerlevel10k` folder exists.
     - If not, clones the Powerlevel10k theme repository and adds the necessary configuration to the `~/.zshrc` file.
 
-11. Rule: `open_iterm2`:
+11. Rule: `open`:
     - Opens iTerm2.
     - If `rectangle` command is available, opens the Rectangle app.
     - If `rectangle-pro` command is available, opens the Rectangle Pro app.
