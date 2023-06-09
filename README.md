@@ -1,9 +1,9 @@
-# Welcome to the ShuZik MakeFile v2.1!
-## Its purpose is to simplify the installation for smooth and effortless start.
-## To execute this script, kindly adhere to the following instructions:
+# Welcome to the MakeFile v2.1!
+Its purpose is to simplify the installation for smooth and effortless start.
+To execute this script, kindly adhere to the following instructions:
 
-#### 1) Open the terminal and run the installation command: make -f Makefile install
-#### 2) Open the terminal and run the updating command: make -f Makefile update
+1) Open the terminal and run the installation command: **make -f Makefile install**
+2) Open the terminal and run the updating command: **make -f Makefile update**
 
 Sit back, relax, and enjoy the seamless experience!
 
