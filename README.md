@@ -1,54 +1,68 @@
 # This Makefile consists of several rules and targets to automate the installation for iOS Developing. 
 # Let's go through it step by step:
 
-1. Setting up the shell and path:
-   - `SHELL := /bin/bash` sets the default shell to Bash.
-   - `PATH := /usr/local/bin:$(PATH)` adds the `/usr/local/bin` directory to the system's PATH variable.
+1. **Setting up the shell and path:**
+   - The `SHELL` variable is set to `/bin/bash`, indicating that the default shell used in the script is Bash.
+   - The `PATH` variable is updated to include the `/usr/local/bin` directory, ensuring that executables in that directory are accessible.
 
-2. Defining variables:
-   - `ruby_version` stores the latest Ruby version available from rbenv.
-   - `current_ruby_version` stores the currently active Ruby version from rbenv.
+2. **Defining variables:**
+   - The `ruby_version` variable stores the latest Ruby version available from `rbenv install -l | grep -v - | tail -1`.
+   - The `current_ruby_version` variable stores the currently installed Ruby version from `rbenv version | awk '{print $$1}'`.
 
-3. Rule: `xcode`:
-   - Checks if the `xcodebuild` command is available.
-   - If not, prompts the user to install Xcode and accepts the license agreement.
+3. **Rule: xcode:**
+   - The target `xcode` checks if the `xcodebuild` command is available.
+   - If `xcodebuild` is not found, it prompts the user to install Xcode and waits until `xcodebuild` is available.
 
-4. Rule: `homebrew`:
-   - Checks if the `brew` command is available.
-   - If not, installs Homebrew using the official installation script.
+4. **Rule: homebrew:**
+   - The target `homebrew` checks if the `brew` command is available.
+   - If `brew` is not found, it installs Homebrew by executing the installation script retrieved from the official Homebrew repository.
 
-5. Rule: `rbenv`:
-   - Checks if the `rbenv` command is available.
-   - If not, installs rbenv using Homebrew and adds the necessary configuration to the `~/.bash_profile` file.
+5. **Rule: rbenv:**
+   - The target `rbenv` checks if the `rbenv` command is available.
+   - If `rbenv` is not found, it installs rbenv using Homebrew and adds the necessary configuration to the `~/.bash_profile` file to initialize `rbenv` in the shell.
 
-6. Rule: `ruby`:
-   - Compares the latest Ruby version with the current Ruby version.
-   - If they are different, installs the latest Ruby version using rbenv and sets it as the global version.
+6. **Rule: ruby:**
+   - The target `ruby` compares the latest Ruby version (`ruby_version`) with the current Ruby version (`current_ruby_version`).
+   - If they are different, it installs the latest Ruby version using `rbenv install` and sets it as the global version using `rbenv global`.
+   - After installing Ruby, it runs `rbenv rehash` to update the Ruby environment.
 
-7. Rule: `bundler`:
-   - Checks if the `bundler` command is available.
-   - If not, installs Bundler gem and performs `rbenv rehash` to update the Ruby environment.
+7. **Rule: bundler:**
+   - The target `bundler` checks if the `bundler` command is available.
+   - If `bundler` is not found, it installs Bundler gem using `gem install --user-install bundler` and performs `rbenv rehash` to update the Ruby environment.
 
-8. Rule: `create_folder`:
-   - Checks if the `~/Developer` folder exists.
-   - If not, creates the `~/Developer` directory.
+8. **Rule: create_folder:**
+   - The target `create_folder` checks if the `~/Developer` folder exists.
+   - If the folder does not exist, it creates it using `sudo mkdir -p ~/Developer`.
 
-9. Rule: `packages`:
-   - Upgrades or installs various packages using Homebrew, including Cocoapods, Fastlane, rbenv-bundler, Fork, iTerm2, Zsh, Slack, Figma, Telegram, and either Rectangle or Rectangle Pro depending on availability.
+9. **Rule: packages_install:**
+   - The target `packages_install` installs various packages and applications using Homebrew (`brew`).
+   - It installs packages like `cocoapods`, `fastlane`, `rbenv-bundler`, and applications like `iterm2`, `slack`, `figma`, `fork`, and `telegram` using the `brew install` command.
 
-10. Rule: `powerlevel10k`:
-    - Checks if the `~/.powerlevel10k` folder exists.
-    - If not, clones the Powerlevel10k theme repository and adds the necessary configuration to the `~/.zshrc` file.
+10. **Rule: package_install_rectangle:**
+    - The target `package_install_rectangle` prompts the user to choose between installing `Rectangle` or `Rectangle Pro`.
+    - The user's choice is stored in the `answer` variable using the `read` command.
+    - Depending on the user's choice, it installs the corresponding package (`rectangle` or `rectangle-pro`) using `brew install --cask`.
 
-11. Rule: `open`:
-    - Opens iTerm2.
-    - If `rectangle` command is available, opens the Rectangle app.
-    - If `rectangle-pro` command is available, opens the Rectangle Pro app.
+11. **Rule: packages_update:**
+    - The target `packages_update` upgrades the installed packages and applications to their latest versions using `brew upgrade`.
+    - It upgrades packages like `cocoapods`, `fastlane`, `rbenv-bundler`, and applications like `iterm2
 
-12. `.PHONY` section:
-    - Lists all the targets that are not associated with actual files.
-    - Ensures that these targets are always executed, regardless of file modifications.
+`, `slack`, `figma`, `fork`, and `telegram`.
+    - Additionally, if either `rectangle` or `rectangle-pro` is already installed, it upgrades the corresponding package.
 
-13. Targets: `install` and `update`:
-    - `install` target runs the necessary rules for installation, including xcode, homebrew, rbenv, ruby, bundler, create_folder, packages, powerlevel10k, and open_iterm2.
-    - `update` target updates rbenv, ruby, and packages.
+12. **Rule: powerlevel10k:**
+    - The target `powerlevel10k` checks if the `~/.powerlevel10k` folder exists.
+    - If the folder does not exist, it clones the Powerlevel10k theme repository from GitHub using `git clone`.
+    - It also adds the necessary configuration to the `~/.zshrc` file to enable the Powerlevel10k theme.
+
+13. **Rule: open_iterm2:**
+    - The target `open_iterm2` opens the iTerm2 application using the `open -a iTerm` command.
+
+14. **PHONY section:**
+    - The `.PHONY` section lists all the targets that are not associated with actual files.
+    - It ensures that these targets are always executed, regardless of whether a file with a matching name exists or not.
+
+15. **Targets: install and update:**
+    - The `install` target sets up the development environment by executing the necessary rules in a specific order.
+    - It includes targets like `xcode`, `homebrew`, `rbenv`, `ruby`, `bundler`, `create_folder`, `packages_install`, `powerlevel10k`, and `open_iterm2`.
+    - The `update` target updates the development environment by upgrading `rbenv`, `ruby`, and installed packages using the `packages_update` rule.
