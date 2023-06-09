@@ -1,14 +1,3 @@
-# Welcome to the ShuZik MakeFile v2.0!
-# Its purpose is to simplify the installation for smooth and effortless start.
-# To execute this script, kindly adhere to the following instructions:
-
-### 1) Open the terminal and run the installation command: make -f Makefile install
-### 2) Open the terminal and run the updating command: make -f Makefile update
-
-# Sit back, relax, and enjoy the seamless experience!
-
-# P.S. You have the flexibility to configure the install_packages section according to your specific application needs.
-
 SHELL := /bin/bash
 PATH := /usr/local/bin:$(PATH)
 
@@ -63,20 +52,20 @@ create_folder:
 		echo "Developer folder already exists."; \
 	fi
 
-packages:
-	brew upgrade cocoapods || brew install cocoapods
-	brew upgrade fastlane || brew install fastlane
-	brew upgrade rbenv-bundler || brew install rbenv-bundler
-	brew upgrade --cask fork || brew install --cask fork
-	brew upgrade --cask iterm2 || brew install --cask iterm2
-	brew upgrade zsh || brew install zsh
-	brew upgrade --cask slack || brew install --cask slack
-	brew upgrade --cask figma || brew install --cask figma
-	brew upgrade --cask telegram || brew install --cask telegram
+# INSTALL
+packages_install:
+	brew install cocoapods
+	brew install fastlane
+	brew install rbenv-bundler
+	brew install --cask iterm2
+	brew install zsh
+	brew install --cask slack
+	brew install --cask figma
+	brew install --cask fork
+	brew install --cask telegram
 
-	brew list --cask rectangle >/dev/null 2>&1 && brew upgrade --cask rectangle || \
-	(brew list --cask rectangle-pro >/dev/null 2>&1 && brew upgrade --cask rectangle-pro || \
-	(read -p "Which Rectangle would you install ? [r/R for Rectangle, p/P for Rectangle Pro, any other key to skip]:" answer; \
+package_install_rectangle:
+	read -p "Do you want to install Rectangle or Rectangle Pro? [r/R for Rectangle, p/P for Rectangle Pro, any other key to skip]: " answer; \
 	case "$$answer" in \
 		[Rr]) \
 			brew install --cask rectangle;; \
@@ -84,8 +73,27 @@ packages:
 			brew install --cask rectangle-pro;; \
 		*) \
 			echo "Skipping Rectangle and Rectangle Pro installation.";; \
-		esac;))
+	esac;
+# -------------
 
+# UPDATE
+packages_update:
+	brew upgrade cocoapods
+	brew upgrade fastlane
+	brew upgrade rbenv-bundler
+	brew upgrade --cask iterm2
+	brew upgrade zsh
+	brew upgrade --cask slack
+	brew upgrade --cask figma
+	brew upgrade --cask fork
+	brew upgrade --cask telegram
+	
+	@if command -v rectangle >/dev/null; then \
+		brew upgrade --cask rectangle; \
+	elif command -v rectangle-pro >/dev/null; then \
+		brew upgrade --cask rectangle-pro; \
+	fi
+# -------------
 
 powerlevel10k:
 	@if [ ! -d "$$HOME/.powerlevel10k" ]; then \
@@ -95,18 +103,10 @@ powerlevel10k:
 		echo "Powerlevel10k theme already exists."; \
 	fi
 
-open:
+open_iterm2:
 	open -a iTerm
-	
-	@if command -v rectangle >/dev/null; then \
-		open -a Rectangle; \
-	elif command -v rectangle-pro >/dev/null; then \
-		open -a Rectangle\ Pro; \
-	fi
 
+.PHONY: xcode homebrew bundler rbenv ruby create_folder packages_install package_install_rectangle powerlevel10k open_iterm2
 
-.PHONY: xcode homebrew bundler rbenv ruby create_folder packages powerlevel10k open
-
-
-install: xcode homebrew rbenv ruby bundler create_folder packages powerlevel10k open
-update: rbenv ruby packages
+install: xcode homebrew rbenv ruby bundler create_folder packages_install powerlevel10k open_iterm2
+update: rbenv ruby packages_update
