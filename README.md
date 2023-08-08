@@ -2,8 +2,8 @@
 Its purpose is to simplify the installation for smooth and effortless start.
 To execute this script, kindly adhere to the following instructions:
 
-1) Open the terminal and run the installation command: **make -f Makefile install**
-2) Open the terminal and run the updating command: **make -f Makefile update**
+1) Open the terminal and run the installation command: **make -f Makefile i**
+2) Open the terminal and run the updating command: **make -f Makefile u**
 
 Sit back, relax, and enjoy the seamless experience!
 
@@ -48,7 +48,7 @@ P.S. You have the flexibility to configure the install_packages section accordin
    - The target `packages_install` installs various packages and applications using Homebrew (`brew`).
    - It installs packages like `cocoapods`, `fastlane`, `rbenv-bundler`, and applications like `iterm2`, `slack`, `figma`, `fork`, and `telegram` using the `brew install` command.
 
-10. **Rule: package_install_rectangle:**
+10. **Rule: rectangle:**
     - The target `package_install_rectangle` prompts the user to choose between installing `Rectangle` or `Rectangle Pro`.
     - The user's choice is stored in the `answer` variable using the `read` command.
     - Depending on the user's choice, it installs the corresponding package (`rectangle` or `rectangle-pro`) using `brew install --cask`.
@@ -74,5 +74,5 @@ P.S. You have the flexibility to configure the install_packages section accordin
 
 15. **Targets: install and update:**
     - The `install` target sets up the development environment by executing the necessary rules in a specific order.
-    - It includes targets like `xcode`, `homebrew`, `rbenv`, `ruby`, `bundler`, `create_folder`, `packages_install`, `powerlevel10k`, and `open_iterm2`.
+    - It includes targets like `xcode`, `homebrew`, `rbenv`, `ruby`, `bundler`, `create_folder`, `rectangle`, `packages_install`, `powerlevel10k`, and `open_iterm2`.
     - The `update` target updates the development environment by upgrading `rbenv`, `ruby`, and installed packages using the `packages_update` rule.
