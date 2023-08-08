@@ -1,3 +1,7 @@
+# cd Folder
+# Install: make Makefile i
+# Update: make Makefile u
+
 SHELL := /bin/bash
 PATH := /usr/local/bin:$(PATH)
 
@@ -52,6 +56,30 @@ create_folder:
 		echo "Developer folder already exists."; \
 	fi
 
+rectangle:
+	read -p "Do you want to install Rectangle or Rectangle Pro? [r/R for Rectangle, p/P for Rectangle Pro, any other key to skip]: " answer; \
+	case "$$answer" in \
+		[Rr]) \
+			brew install --cask rectangle;; \
+		[Pp]) \
+			brew install --cask rectangle-pro;; \
+		*) \
+			echo "Skipping Rectangle and Rectangle Pro installation.";; \
+	esac;
+	
+powerlevel10k:
+	@if [ ! -d "$$HOME/.powerlevel10k" ]; then \
+		git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k; \
+		echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc; \
+	else \
+		echo "Powerlevel10k theme already exists."; \
+	fi
+
+open_iterm2:
+	open -a iTerm
+	
+# -------------
+
 # INSTALL
 packages_install:
 	brew install cocoapods
@@ -63,19 +91,7 @@ packages_install:
 	brew install --cask figma
 	brew install --cask fork
 	brew install --cask telegram
-
-package_install_rectangle:
-	read -p "Do you want to install Rectangle or Rectangle Pro? [r/R for Rectangle, p/P for Rectangle Pro, any other key to skip]: " answer; \
-	case "$$answer" in \
-		[Rr]) \
-			brew install --cask rectangle;; \
-		[Pp]) \
-			brew install --cask rectangle-pro;; \
-		*) \
-			echo "Skipping Rectangle and Rectangle Pro installation.";; \
-	esac;
-# -------------
-
+	
 # UPDATE
 packages_update:
 	brew upgrade cocoapods
@@ -93,20 +109,10 @@ packages_update:
 	elif command -v rectangle-pro >/dev/null; then \
 		brew upgrade --cask rectangle-pro; \
 	fi
+	
 # -------------
 
-powerlevel10k:
-	@if [ ! -d "$$HOME/.powerlevel10k" ]; then \
-		git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k; \
-		echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc; \
-	else \
-		echo "Powerlevel10k theme already exists."; \
-	fi
+.PHONY: xcode homebrew bundler rbenv ruby create_folder packages_install rectangle powerlevel10k open_iterm2
 
-open_iterm2:
-	open -a iTerm
-
-.PHONY: xcode homebrew bundler rbenv ruby create_folder packages_install package_install_rectangle powerlevel10k open_iterm2
-
-install: xcode homebrew rbenv ruby bundler create_folder packages_install powerlevel10k open_iterm2
-update: rbenv ruby packages_update
+i: xcode homebrew rbenv ruby bundler create_folder packages_install rectangle powerlevel10k open_iterm2
+u: rbenv ruby packages_update
